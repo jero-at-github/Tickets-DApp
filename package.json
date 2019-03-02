@@ -1,0 +1,20 @@
+{
+  "name": "supply-chain-E",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "webapp": "lite-server",
+    "deploy-dev": "truffle.cmd compile --reset & truffle.cmd deploy --network development --reset",
+    "deploy-rinkeby": "truffle.cmd compile --reset & truffle.cmd deploy --network rinkeby --reset",
+    "test": "truffle.cmd test"
+  },
+  "keywords": [],
+  "author": "pk <pkrasam@gmail.com> (https://ipfs.infura.io/ipfs/QmSXiR9Khm3yo1J67nUopvVBxFJ8YGN2fUGZ34Etr3m92x/)",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "lite-server": "2.4.0",
+    "truffle-core": "4.1.15"
+  }
+}
