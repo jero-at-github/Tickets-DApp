@@ -101,7 +101,7 @@ contract SupplyChain {
   // and set 'upc' to 1
   constructor() public payable {
     owner = msg.sender;    
-    upc = 1;
+    upc = 0;
   }
 
   // Define a function 'kill' if required
@@ -112,13 +112,16 @@ contract SupplyChain {
   }
 
   // Define a function 'create' that allows a organizer to create a ticket
-  function create(uint _upc, address _originOrganizerID, string _originOrganizerName, string _originOrganizerInformation, string  _productNotes, uint _productPrice) public 
-  {            
+  function create(address _originOrganizerID, string _originOrganizerName, string _originOrganizerInformation, string  _productNotes, uint _productPrice) public 
+  {   
+    // Increment upc  
+    upc = upc + 1;           
+
     // Create new ticket
     Ticket memory newTicket;
         
     newTicket.ownerID = _originOrganizerID;
-    newTicket.upc = _upc;
+    newTicket.upc = upc;
     newTicket.originOrganizerID = _originOrganizerID;
     newTicket.originOrganizerName = _originOrganizerName;
     newTicket.originOrganizerInformation = _originOrganizerInformation;
@@ -127,10 +130,10 @@ contract SupplyChain {
     newTicket.itemState = State.Created;
 
     // Persist the new createad ticket
-    tickets[_upc] = newTicket;
+    tickets[upc] = newTicket;
 
     // Emit the appropriate event
-    emit Created(_upc);
+    emit Created(upc);
   }
 
   // Define a function 'processtItem' that allows a farmer to mark an item 'Processed'
