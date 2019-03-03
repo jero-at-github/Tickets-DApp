@@ -12,9 +12,10 @@
   "keywords": [],
   "author": "pk <pkrasam@gmail.com> (https://ipfs.infura.io/ipfs/QmSXiR9Khm3yo1J67nUopvVBxFJ8YGN2fUGZ34Etr3m92x/)",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "solc": "^0.4.24"
+  },
   "devDependencies": {
-    "lite-server": "2.4.0",
-    "truffle-core": "4.1.15"
+    "lite-server": "2.4.0"
   }
 }
