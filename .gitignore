@@ -1,3 +1,9 @@
 node_modules
 build/*
-build/contracts/*
+build/contracts/*.*
+build/contracts/FarmerRole.json
+build/contracts/ConsumerRole.json
+build/contracts/DistributorRole.json
+build/contracts/Migrations.json
+build/contracts/RetailerRole.json
+build/contracts/SupplyChain.json
