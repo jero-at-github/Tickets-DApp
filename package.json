@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "webapp": "lite-server",
-    "deploy-dev": "truffle.cmd compile --reset & truffle.cmd deploy --network development --reset",
-    "deploy-rinkeby": "truffle.cmd compile --reset & truffle.cmd deploy --network rinkeby --reset",
+    "deploy-dev": "truffle.cmd compile --reset && truffle.cmd deploy --network development --reset",
+    "deploy-rinkeby": "truffle.cmd compile --reset && truffle.cmd deploy --network rinkeby --reset",
     "test": "truffle.cmd test"
   },
   "keywords": [],
