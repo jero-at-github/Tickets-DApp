@@ -1,3 +1,5 @@
+const truffleAssert = require('truffle-assertions');
+
 // This script is designed to test the solidity smart contract - SuppyChain.sol -- and the various functions within
 // Declare a variable and assign the compiled smart contract artifact
 var SupplyChain = artifacts.require('SupplyChain')
@@ -15,6 +17,8 @@ contract('SupplyChain', function(accounts) {
     const attendeeID = accounts[2]
     const validatorID = accounts[3]
     const emptyAddress = '0x00000000000000000000000000000000000000'
+    const organizedEventID = 1;
+    const upc = 1;
 
     ///Available Accounts
     ///==================
@@ -36,31 +40,43 @@ contract('SupplyChain', function(accounts) {
     console.log("Validator: accounts[3] ", accounts[3])    
 
     // 1st Test
-    it.only("Testing smart contract function create() that allows a organizer to create a ticket", async() => {
+    it("Testing smart contract function createTicket() and createOrganizedEvent() and  that allows a organizer to create an organized event and a ticket", async () => {
         
         const supplyChain = await SupplyChain.deployed()
-                
-        // Watch the emitted event Created()
-        var event = supplyChain.Created()
+   
+        // Create an organized event
+        await supplyChain.createOrganizedEvent(originOrganizerID, originOrganizerName, originOrganizerInformation).then((result) => {
 
-        await event.watch(async (err, res) => {
-
-            // Retrieve the just now saved ticket from blockchain by calling function fetchItem()
-            const resultBufferOne = await supplyChain.fetchItemBufferOne.call(res.args.upc.toNumber())        
-
-            // Verify the result set                    
-            assert.equal(resultBufferOne[1], originOrganizerID, 'Error: Missing or Invalid ownerID')
-            assert.equal(resultBufferOne[2], originOrganizerID, 'Error: Missing or Invalid originFarmerID')
-            assert.equal(resultBufferOne[3], originOrganizerName, 'Error: Missing or Invalid originFarmName')
-            assert.equal(resultBufferOne[4], originOrganizerInformation, 'Error: Missing or Invalid originFarmInformation')        
-            assert.equal(resultBufferOne[5], productNotes, 'Error: Missing or Invalid productNotes')        
-            assert.equal(resultBufferOne[6].toNumber(), productPrice, 'Error: Missing or Invalid productPrice')        
-            assert.equal(resultBufferOne[7].toNumber(), 0, 'Error: Invalid item State')
-            assert.equal(eventEmitted, true, 'Invalid event emitted')        
+            truffleAssert.eventEmitted(result, 'OrganizedEventCreated', (ev) => {                
+                return ev.organizedEventId.toNumber() == organizedEventID;
+            }, 'OrganizedEventCreated should be emitted with correct parameters');
         })
 
-        // Mark an item as Created by calling function create()
-        await supplyChain.create(originOrganizerID, originOrganizerName, originOrganizerInformation, productNotes, productPrice)        
+        // Get the recent created organized event
+        const resultOrganizedEvent = await supplyChain.fetchOrganizedEvent(organizedEventID)
+
+        // Verify the returned values
+        assert.equal(resultOrganizedEvent[1], originOrganizerID, 'Error: Missing or Invalid originOrganizerID')
+        assert.equal(resultOrganizedEvent[2], originOrganizerName, 'Error: Missing or Invalid originOrganizerName')
+        assert.equal(resultOrganizedEvent[3], originOrganizerInformation, 'Error: Missing or Invalid originOrganizerInformation')            
+        
+        // Mark a ticket as Created by calling function createTicket()
+        await supplyChain.createTicket(originOrganizerID, organizedEventID, productNotes, productPrice).then((result) => {
+
+            truffleAssert.eventEmitted(result, 'TicketCreated', (ev) => {                
+                return ev.upc.toNumber() == upc;
+            }, 'TicketCreated should be emitted with correct parameters');
+        })   
+        
+        // Retrieve the just now saved ticket from blockchain by calling function fetchTicket()
+        const resultTicket = await supplyChain.fetchTicket.call(upc)        
+
+        // Verify the returned values              
+        assert.equal(resultTicket[1], originOrganizerID, 'Error: Missing or Invalid ownerID')
+        assert.equal(resultTicket[2].toNumber(), organizedEventID, 'Error: Missing or Invalid organizedEventID')
+        assert.equal(resultTicket[3], productNotes, 'Error: Missing or Invalid productNotes')
+        assert.equal(resultTicket[4].toNumber(), productPrice, 'Error: Missing or Invalid productPrice')        
+        assert.equal(resultTicket[5].toNumber(), itemState, 'Error: Missing or Invalid itemState')                
     })    
 
     // 2nd Test
