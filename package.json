@@ -16,6 +16,7 @@
     "solc": "^0.4.24"
   },
   "devDependencies": {
-    "lite-server": "2.4.0"
+    "lite-server": "2.4.0",
+    "truffle-assertions": "^0.8.0"
   }
 }
