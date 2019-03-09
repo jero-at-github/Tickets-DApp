@@ -13,7 +13,8 @@
   "author": "pk <pkrasam@gmail.com> (https://ipfs.infura.io/ipfs/QmSXiR9Khm3yo1J67nUopvVBxFJ8YGN2fUGZ34Etr3m92x/)",
   "license": "MIT",
   "dependencies": {
-    "solc": "^0.4.24"
+    "solc": "^0.4.24",
+    "truffle-hdwallet-provider": "^0.0.6"
   },
   "devDependencies": {
     "lite-server": "2.4.0",
