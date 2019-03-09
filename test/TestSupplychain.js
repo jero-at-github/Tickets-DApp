@@ -12,8 +12,13 @@ contract('SupplyChain', function(accounts) {
     const originOrganizerName = "Metal music concerts Inc."
     const originOrganizerInformation = "Rock and metal music concerts organizer around the world."    
     const productNotes = "Ticket for Metallica music concert"
-    const productPrice = web3.toWei(1, "ether")
-    var itemState = 0    
+    const productPrice = web3.toWei(0.2, "ether")      
+
+    var StateCreated = 0
+    var StateForSale = 1
+    var StateSold = 2
+    var StateAllowed = 3
+
     const attendeeID = accounts[2]
     const validatorID = accounts[3]
     const emptyAddress = '0x00000000000000000000000000000000000000'
@@ -47,6 +52,7 @@ contract('SupplyChain', function(accounts) {
         // Create an organized event
         await supplyChain.createOrganizedEvent(originOrganizerID, originOrganizerName, originOrganizerInformation).then((result) => {
 
+            // Watch the emitted event OrganizedEventCreated
             truffleAssert.eventEmitted(result, 'OrganizedEventCreated', (ev) => {                
                 return ev.organizedEventId.toNumber() == organizedEventID;
             }, 'OrganizedEventCreated should be emitted with correct parameters');
@@ -59,10 +65,11 @@ contract('SupplyChain', function(accounts) {
         assert.equal(resultOrganizedEvent[1], originOrganizerID, 'Error: Missing or Invalid originOrganizerID')
         assert.equal(resultOrganizedEvent[2], originOrganizerName, 'Error: Missing or Invalid originOrganizerName')
         assert.equal(resultOrganizedEvent[3], originOrganizerInformation, 'Error: Missing or Invalid originOrganizerInformation')            
-        
-        // Mark a ticket as Created by calling function createTicket()
-        await supplyChain.createTicket(originOrganizerID, organizedEventID, productNotes, productPrice).then((result) => {
 
+        // Mark a ticket as Created by calling function createTicket()
+        await supplyChain.createTicket(originOrganizerID, organizedEventID, productNotes, validatorID).then((result) => {
+
+            // Watch the emitted event TicketCreated
             truffleAssert.eventEmitted(result, 'TicketCreated', (ev) => {                
                 return ev.upc.toNumber() == upc;
             }, 'TicketCreated should be emitted with correct parameters');
@@ -74,173 +81,53 @@ contract('SupplyChain', function(accounts) {
         // Verify the returned values              
         assert.equal(resultTicket[1], originOrganizerID, 'Error: Missing or Invalid ownerID')
         assert.equal(resultTicket[2].toNumber(), organizedEventID, 'Error: Missing or Invalid organizedEventID')
-        assert.equal(resultTicket[3], productNotes, 'Error: Missing or Invalid productNotes')
-        assert.equal(resultTicket[4].toNumber(), productPrice, 'Error: Missing or Invalid productPrice')        
-        assert.equal(resultTicket[5].toNumber(), itemState, 'Error: Missing or Invalid itemState')                
+        assert.equal(resultTicket[3], productNotes, 'Error: Missing or Invalid productNotes')           
+        assert.equal(resultTicket[5].toNumber(), StateCreated, 'Error: Missing or Invalid state')                
     })    
 
     // 2nd Test
-    it("Testing smart contract function processItem() that allows a farmer to process coffee", async() => {
+    it("Testing smart contract function putTicketForSale() that allows a organizer to put a ticket for sell", async() => {        
+
         const supplyChain = await SupplyChain.deployed()
+   
+        // Mark a ticket as "ForSale" by calling function putTicketForSale()       
+        await supplyChain.putTicketForSale(upc, productPrice, {from: originOrganizerID}).then((result) => {        
         
-        // Declare and Initialize a variable for event
-        
-        
-        // Watch the emitted event Processed()
-        
+            // Watch the emitted event TicketForSale
+            truffleAssert.eventEmitted(result, 'TicketForSale', (ev) => {                
+                return ev.upc.toNumber() == upc;
+            }, 'TicketForSale should be emitted with correct parameters');
+        })        
 
-        // Mark an item as Processed by calling function processtItem()
-        
+        // Retrieve the just now saved ticket from blockchain by calling function fetchTicket()
+        const resultTicket = await supplyChain.fetchTicket.call(upc)        
 
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
-        // Verify the result set
-        
+        // Verify the returned values              
+        assert.equal(resultTicket[4].toNumber(), productPrice, 'Error: Missing or Invalid productPrice')        
+        assert.equal(resultTicket[5].toNumber(), StateForSale, 'Error: Missing or Invalid state')          
     })    
 
-    // 3rd Test
-    it("Testing smart contract function packItem() that allows a farmer to pack coffee", async() => {
+   // 3nd Test
+   it("Testing smart contract function buyTicket() that allows a attendee to buy a ticket", async() => {        
+
         const supplyChain = await SupplyChain.deployed()
-        
-        // Declare and Initialize a variable for event
-        
-        
-        // Watch the emitted event Packed()
-        
 
-        // Mark an item as Packed by calling function packItem()
+        // Mark a ticket as "Sold" by calling function putTicketForSale()       
+        await supplyChain.buyTicket(upc, {from: attendeeID,  value: productPrice}).then((result) => {        
         
+            // Watch the emitted event TicketSold
+            truffleAssert.eventEmitted(result, 'TicketSold', (ev) => {                
+                return ev.upc.toNumber() == upc;
+            }, 'TicketSold should be emitted with correct parameters');
+        })        
 
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
+        // Retrieve the just now saved ticket from blockchain by calling function fetchTicket()
+        const resultTicket = await supplyChain.fetchTicket.call(upc)        
 
-        // Verify the result set
-        
+        // Verify the returned values              
+        assert.equal(resultTicket[1], attendeeID, 'Error: Missing or Invalid ownerID')
+        assert.equal(resultTicket[5].toNumber(), StateSold, 'Error: Missing or Invalid state')    
     })    
-
-    // 4th Test
-    it("Testing smart contract function sellItem() that allows a farmer to sell coffee", async() => {
-        const supplyChain = await SupplyChain.deployed()
-        
-        // Declare and Initialize a variable for event
-        
-        
-        // Watch the emitted event ForSale()
-        
-
-        // Mark an item as ForSale by calling function sellItem()
-        
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
-        // Verify the result set
-          
-    })    
-
-    // 5th Test
-    it("Testing smart contract function buyItem() that allows a distributor to buy coffee", async() => {
-        const supplyChain = await SupplyChain.deployed()
-        
-        // Declare and Initialize a variable for event
-        
-        
-        // Watch the emitted event Sold()
-        var event = supplyChain.Sold()
-        
-
-        // Mark an item as Sold by calling function buyItem()
-        
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
-        // Verify the result set
-        
-    })    
-
-    // 6th Test
-    it("Testing smart contract function shipItem() that allows a distributor to ship coffee", async() => {
-        const supplyChain = await SupplyChain.deployed()
-        
-        // Declare and Initialize a variable for event
-        
-        
-        // Watch the emitted event Shipped()
-        
-
-        // Mark an item as Sold by calling function buyItem()
-        
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
-        // Verify the result set
-              
-    })    
-
-    // 7th Test
-    it("Testing smart contract function receiveItem() that allows a retailer to mark coffee received", async() => {
-        const supplyChain = await SupplyChain.deployed()
-        
-        // Declare and Initialize a variable for event
-        
-        
-        // Watch the emitted event Received()
-        
-
-        // Mark an item as Sold by calling function buyItem()
-        
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
-        // Verify the result set
-             
-    })    
-
-    // 8th Test
-    it("Testing smart contract function purchaseItem() that allows a consumer to purchase coffee", async() => {
-        const supplyChain = await SupplyChain.deployed()
-        
-        // Declare and Initialize a variable for event
-        
-        
-        // Watch the emitted event Purchased()
-        
-
-        // Mark an item as Sold by calling function buyItem()
-        
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
-        // Verify the result set
-        
-    })    
-
-    // 9th Test
-    it("Testing smart contract function fetchItemBufferOne() that allows anyone to fetch item details from blockchain", async() => {
-        const supplyChain = await SupplyChain.deployed()
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-        
-        // Verify the result set:
-        
-    })
-
-    // 10th Test
-    it("Testing smart contract function fetchItemBufferTwo() that allows anyone to fetch item details from blockchain", async() => {
-        const supplyChain = await SupplyChain.deployed()
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-        
-        // Verify the result set:
-        
-    })
 
 });
 

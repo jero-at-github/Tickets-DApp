@@ -149,7 +149,7 @@ contract SupplyChain {
   }
 
   // Define a function 'create' that allows a organizer to create a ticket
-  function createTicket(address _originOrganizerID, uint _organizedEventID, string  _productNotes, uint _productPrice, address _validatorID) public 
+  function createTicket(address _originOrganizerID, uint _organizedEventID, string  _productNotes, address _validatorID) public 
   {   
     // Increment upc  
     upc = upc + 1;           
@@ -160,8 +160,7 @@ contract SupplyChain {
     newTicket.ownerID = _originOrganizerID;
     newTicket.upc = upc;    
     newTicket.organizedEventID = _organizedEventID;
-    newTicket.productNotes = _productNotes;
-    newTicket.productPrice = _productPrice;
+    newTicket.productNotes = _productNotes;    
     newTicket.itemState = State.Created;
     newTicket.validatorID = _validatorID;
 
