@@ -108,7 +108,7 @@ contract('SupplyChain', function(accounts) {
     })    
 
    // 3nd Test
-   it("Testing smart contract function buyTicket() that allows a attendee to buy a ticket", async() => {        
+   it("Testing smart contract function buyTicket() that allows an attendee to buy a ticket", async() => {        
 
         const supplyChain = await SupplyChain.deployed()
 
@@ -127,6 +127,28 @@ contract('SupplyChain', function(accounts) {
         // Verify the returned values              
         assert.equal(resultTicket[1], attendeeID, 'Error: Missing or Invalid ownerID')
         assert.equal(resultTicket[5].toNumber(), StateSold, 'Error: Missing or Invalid state')    
+    })    
+
+    // 4nd Test
+   it("Testing smart contract function validateTicket() that allows a validator to validate a ticket of a attendee", async() => {        
+
+        const supplyChain = await SupplyChain.deployed()
+
+        // Mark a ticket as "Allowed" by calling function validateTicket()       
+        await supplyChain.validateTicket(upc, attendeeID, {from: validatorID}).then((result) => {        
+        
+            // Watch the emitted event TicketSold
+            truffleAssert.eventEmitted(result, 'TicketAllowed', (ev) => {                
+                return ev.upc.toNumber() == upc;
+            }, 'TicketAllowed should be emitted with correct parameters');
+        })        
+
+        // Retrieve the just now saved ticket from blockchain by calling function fetchTicket()
+        const resultTicket = await supplyChain.fetchTicket.call(upc)        
+
+        // Verify the returned values              
+        assert.equal(resultTicket[1], validatorID, 'Error: Missing or Invalid ownerID')
+        assert.equal(resultTicket[5].toNumber(), StateAllowed, 'Error: Missing or Invalid state')    
     })    
 
 });
