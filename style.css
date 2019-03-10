@@ -7,3 +7,9 @@ body {
 #console {
     background-color: #CCC;
 }
+
+.form-group {
+    margin-bottom: 30px;
+    border-left: solid 1px #CCC;    
+    padding-left: 10px;
+}

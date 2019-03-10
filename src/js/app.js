@@ -1,9 +1,7 @@
 App = {
     web3Provider: null,
     contracts: {},
-    emptyAddress: "0x0000000000000000000000000000000000000000",    
-    upc: 0,
-    organizedEventID: 0,
+    emptyAddress: "0x0000000000000000000000000000000000000000",        
     metamaskAccountID: "0x0000000000000000000000000000000000000000",
     ownerID: "0x0000000000000000000000000000000000000000",
     originFarmerID: "0x0000000000000000000000000000000000000000",
@@ -26,6 +24,7 @@ App = {
     readForm: function () {        
         App.upc = $("#upc").val();
         App.ownerID = $("#ownerID").val();
+        App.organizedEventId = $("#organizedEventId").val();
         App.originOrganizerID = $("#originOrganizerID").val();
         App.originOrganizerName = $("#originOrganizerName").val();
         App.originOrganizerInformation = $("#originOrganizerInformation").val();
@@ -42,6 +41,7 @@ App = {
         App.consumerID = $("#consumerID").val();
         */
         console.log(
+            /*
             App.sku,
             App.upc,
             App.ownerID, 
@@ -55,6 +55,7 @@ App = {
             App.distributorID, 
             App.retailerID, 
             App.consumerID
+            */
         );
     },
 
@@ -172,9 +173,9 @@ App = {
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.createOrganizedEvent(
-                App.originOrganizerID, 
-                App.originOrganizerName, 
-                App.originOrganizerInformation
+                $("#originOrganizerID").val(), 
+                $("#originOrganizerName").val(), 
+                $("#originOrganizerInformation").val()
             );
         }).then(function(result) {
             $("#console").text(result);
@@ -324,12 +325,10 @@ App = {
         });
     },
 
-    fetchOrganizedEvent: function () {
-    ///    event.preventDefault();
-    ///    var processId = parseInt($(event.target).data('id'));
-                        
+    fetchOrganizedEvent: function () {        
+
         App.contracts.SupplyChain.deployed().then(function(instance) {
-          return instance.fetchOrganizedEvent.call(App.organizedEventID);
+          return instance.fetchOrganizedEvent.call($("#organizedEventId").val());
         }).then(function(result) {
           $("#console").text(result);
           console.log('fetchOrganizedEvent', result);
