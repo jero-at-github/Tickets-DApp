@@ -17,7 +17,7 @@ Diagrams are included in the folder "diagrams" including:
 
 #### Rinkeby deployment information
 
-Contract was deployed in Rinkeby with the hash: 
+Contract was deployed in Rinkeby with the hash: 0xf8901797619b8822880b57237c7825efb48b42f8 
 
 #### General Write Up
 
