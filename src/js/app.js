@@ -1,9 +1,9 @@
 App = {
     web3Provider: null,
     contracts: {},
-    emptyAddress: "0x0000000000000000000000000000000000000000",
-    sku: 0,
+    emptyAddress: "0x0000000000000000000000000000000000000000",    
     upc: 0,
+    organizedEventID: 0,
     metamaskAccountID: "0x0000000000000000000000000000000000000000",
     ownerID: "0x0000000000000000000000000000000000000000",
     originFarmerID: "0x0000000000000000000000000000000000000000",
@@ -23,10 +23,13 @@ App = {
         return await App.initWeb3();
     },
 
-    readForm: function () {
-        App.sku = $("#sku").val();
+    readForm: function () {        
         App.upc = $("#upc").val();
         App.ownerID = $("#ownerID").val();
+        App.originOrganizerID = $("#originOrganizerID").val();
+        App.originOrganizerName = $("#originOrganizerName").val();
+        App.originOrganizerInformation = $("#originOrganizerInformation").val();
+        /*        
         App.originFarmerID = $("#originFarmerID").val();
         App.originFarmName = $("#originFarmName").val();
         App.originFarmInformation = $("#originFarmInformation").val();
@@ -37,7 +40,7 @@ App = {
         App.distributorID = $("#distributorID").val();
         App.retailerID = $("#retailerID").val();
         App.consumerID = $("#consumerID").val();
-
+        */
         console.log(
             App.sku,
             App.upc,
@@ -108,8 +111,8 @@ App = {
             App.contracts.SupplyChain = TruffleContract(SupplyChainArtifact);
             App.contracts.SupplyChain.setProvider(App.web3Provider);
             
-            App.fetchItemBufferOne();
-            App.fetchItemBufferTwo();
+            App.fetchOrganizedEvent();
+            App.fetchTicket();            
             App.fetchEvents();
 
         });
@@ -131,10 +134,10 @@ App = {
 
         switch(processId) {
             case 1:
-                return await App.harvestItem(event);
+                return await App.createOrganizedEvent(event);
                 break;
             case 2:
-                return await App.processItem(event);
+                return await App.fetchOrganizedEvent(event);
                 break;
             case 3:
                 return await App.packItem(event);
@@ -155,13 +158,32 @@ App = {
                 return await App.purchaseItem(event);
                 break;
             case 9:
-                return await App.fetchItemBufferOne(event);
+                return await App.fetchTicket(event);
                 break;
             case 10:
-                return await App.fetchItemBufferTwo(event);
+                return await App.xx(event);
                 break;
             }
+    },    
+
+    createOrganizedEvent: function(event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.contracts.SupplyChain.deployed().then(function(instance) {
+            return instance.createOrganizedEvent(
+                App.originOrganizerID, 
+                App.originOrganizerName, 
+                App.originOrganizerInformation
+            );
+        }).then(function(result) {
+            $("#console").text(result);
+            console.log('createOrganizedEvent',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
     },
+
 
     harvestItem: function(event) {
         event.preventDefault();
@@ -178,7 +200,7 @@ App = {
                 App.productNotes
             );
         }).then(function(result) {
-            $("#ftc-item").text(result);
+            $("#console").text(result);
             console.log('harvestItem',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -192,7 +214,7 @@ App = {
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.processItem(App.upc, {from: App.metamaskAccountID});
         }).then(function(result) {
-            $("#ftc-item").text(result);
+            $("#console").text(result);
             console.log('processItem',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -206,7 +228,7 @@ App = {
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.packItem(App.upc, {from: App.metamaskAccountID});
         }).then(function(result) {
-            $("#ftc-item").text(result);
+            $("#console").text(result);
             console.log('packItem',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -222,7 +244,7 @@ App = {
             console.log('productPrice',productPrice);
             return instance.sellItem(App.upc, App.productPrice, {from: App.metamaskAccountID});
         }).then(function(result) {
-            $("#ftc-item").text(result);
+            $("#console").text(result);
             console.log('sellItem',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -237,7 +259,7 @@ App = {
             const walletValue = web3.toWei(3, "ether");
             return instance.buyItem(App.upc, {from: App.metamaskAccountID, value: walletValue});
         }).then(function(result) {
-            $("#ftc-item").text(result);
+            $("#console").text(result);
             console.log('buyItem',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -251,7 +273,7 @@ App = {
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.shipItem(App.upc, {from: App.metamaskAccountID});
         }).then(function(result) {
-            $("#ftc-item").text(result);
+            $("#console").text(result);
             console.log('shipItem',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -265,7 +287,7 @@ App = {
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.receiveItem(App.upc, {from: App.metamaskAccountID});
         }).then(function(result) {
-            $("#ftc-item").text(result);
+            $("#console").text(result);
             console.log('receiveItem',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -279,38 +301,38 @@ App = {
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.purchaseItem(App.upc, {from: App.metamaskAccountID});
         }).then(function(result) {
-            $("#ftc-item").text(result);
+            $("#console").text(result);
             console.log('purchaseItem',result);
         }).catch(function(err) {
             console.log(err.message);
         });
     },
 
-    fetchItemBufferOne: function () {
+    fetchTicket: function () {
     ///   event.preventDefault();
     ///    var processId = parseInt($(event.target).data('id'));
         App.upc = $('#upc').val();
         console.log('upc',App.upc);
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
-          return instance.fetchItemBufferOne(App.upc);
+          return instance.fetchTicket(App.upc);
         }).then(function(result) {
-          $("#ftc-item").text(result);
-          console.log('fetchItemBufferOne', result);
+          $("#console").text(result);
+          console.log('fetchTicket', result);
         }).catch(function(err) {
           console.log(err.message);
         });
     },
 
-    fetchItemBufferTwo: function () {
+    fetchOrganizedEvent: function () {
     ///    event.preventDefault();
     ///    var processId = parseInt($(event.target).data('id'));
                         
         App.contracts.SupplyChain.deployed().then(function(instance) {
-          return instance.fetchItemBufferTwo.call(App.upc);
+          return instance.fetchOrganizedEvent.call(App.organizedEventID);
         }).then(function(result) {
-          $("#ftc-item").text(result);
-          console.log('fetchItemBufferTwo', result);
+          $("#console").text(result);
+          console.log('fetchOrganizedEvent', result);
         }).catch(function(err) {
           console.log(err.message);
         });
