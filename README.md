@@ -11,15 +11,24 @@ Diagrams are included in the folder "diagrams" including:
 
 #### Libraries
 
+Node.js:
 *  solc ^0.4.24 : This library is used to avoid error and warnings from Visual Studio Code, which uses by default the Solidity Compiler version 5. 
 *  truffle-hdwallet-provider ^0.0.6 : This library is used to connect to Infura and pass our mnemonic.
 *  truffle-assertions ^0.8.0: I am using this library to assert in a more efficient and clear way the solidity events from the tests.
+
+Others:
+*  Bootstrap 4.3.1: To add responsive design
 
 #### Rinkeby deployment information
 
 Contract was deployed in Rinkeby with the hash: 0xf8901797619b8822880b57237c7825efb48b42f8 
 
 #### General Write Up
+
+Contract owner:     0x4348e2F2ac596e44E6A6D4151aE84e4aA4126A8d
+Events organizer:   0xDBb54507C1f9D815C1B60d6D44F239C002c5Cd22
+Attendee:           0x5ecD0CcD50d9Ca527923E8dC4F55ED30b740B8C7
+Validator:          0x6517E225289aCD4c64F3243Ebe979475e4B15Ff7
 
 #### Usage instructions
 
