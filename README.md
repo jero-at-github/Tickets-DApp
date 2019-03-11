@@ -21,20 +21,19 @@ Others:
 
 #### Rinkeby deployment information
 
-Contract was deployed in Rinkeby with the hash: 0xf8901797619b8822880b57237c7825efb48b42f8 
+Contract was deployed in Rinkeby with the hash: 0x8f692c347fd2ee1d304d0442a807802ba47f43b1 
+Contract owner: 0x4348e2F2ac596e44E6A6D4151aE84e4aA4126A8d
 
 #### General Write Up
 
-Contract owner:     0x4348e2F2ac596e44E6A6D4151aE84e4aA4126A8d
-Events organizer:   0xDBb54507C1f9D815C1B60d6D44F239C002c5Cd22
-Attendee:           0x5ecD0CcD50d9Ca527923E8dC4F55ED30b740B8C7
-Validator:          0x6517E225289aCD4c64F3243Ebe979475e4B15Ff7
+
 
 #### Usage instructions
 
 To run the UI: 
-1.  ```npm install```
-2.  ```npm run webapp```
+1.  Please, create in Metamask 3 accounts for each of the respectives roles: Events organizer, Validator, Attendee
+2.  ```npm install```
+3.  ```npm run webapp```
 
 To deploy in local environment:
 1.  ```npm run deploy-web```

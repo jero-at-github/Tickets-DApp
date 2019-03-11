@@ -67,7 +67,7 @@ contract('SupplyChain', function(accounts) {
         assert.equal(resultOrganizedEvent[3], originOrganizerInformation, 'Error: Missing or Invalid originOrganizerInformation')            
 
         // Mark a ticket as Created by calling function createTicket()
-        await supplyChain.createTicket(originOrganizerID, organizedEventID, productNotes, validatorID).then((result) => {
+        await supplyChain.createTicket(organizedEventID, productNotes, validatorID).then((result) => {
 
             // Watch the emitted event TicketCreated
             truffleAssert.eventEmitted(result, 'TicketCreated', (ev) => {                
