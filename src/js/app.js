@@ -139,7 +139,7 @@ App = {
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
             let productPrice = web3.toWei($("#price").val(), "ether");            
-            return instance.sellItem($("#upc").val(), productPrice, {from: App.metamaskAccountID});
+            return instance.putTicketForSale($("#upc").val(), productPrice, {from: App.metamaskAccountID});
         }).then(function(result) {
             $("#console").text(result);
             console.log('putTicketForSale',result);
