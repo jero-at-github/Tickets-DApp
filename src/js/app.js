@@ -15,48 +15,9 @@ App = {
     retailerID: "0x0000000000000000000000000000000000000000",
     consumerID: "0x0000000000000000000000000000000000000000",
 
-    init: async function () {
-        App.readForm();
+    init: async function () {       
         /// Setup access to blockchain
         return await App.initWeb3();
-    },
-
-    readForm: function () {        
-        App.upc = $("#upc").val();
-        App.ownerID = $("#ownerID").val();
-        App.organizedEventId = $("#organizedEventId").val();
-        App.originOrganizerID = $("#originOrganizerID").val();
-        App.originOrganizerName = $("#originOrganizerName").val();
-        App.originOrganizerInformation = $("#originOrganizerInformation").val();
-        /*        
-        App.originFarmerID = $("#originFarmerID").val();
-        App.originFarmName = $("#originFarmName").val();
-        App.originFarmInformation = $("#originFarmInformation").val();
-        App.originFarmLatitude = $("#originFarmLatitude").val();
-        App.originFarmLongitude = $("#originFarmLongitude").val();
-        App.productNotes = $("#productNotes").val();
-        App.productPrice = $("#productPrice").val();
-        App.distributorID = $("#distributorID").val();
-        App.retailerID = $("#retailerID").val();
-        App.consumerID = $("#consumerID").val();
-        */
-        console.log(
-            /*
-            App.sku,
-            App.upc,
-            App.ownerID, 
-            App.originFarmerID, 
-            App.originFarmName, 
-            App.originFarmInformation, 
-            App.originFarmLatitude, 
-            App.originFarmLongitude, 
-            App.productNotes, 
-            App.productPrice, 
-            App.distributorID, 
-            App.retailerID, 
-            App.consumerID
-            */
-        );
     },
 
     initWeb3: async function () {
@@ -141,10 +102,10 @@ App = {
                 return await App.fetchOrganizedEvent(event);
                 break;
             case 3:
-                return await App.packItem(event);
+                return await App.createTicket(event);
                 break;
             case 4:
-                return await App.sellItem(event);
+                return await App.fetchTicket(event);
                 break;
             case 5:
                 return await App.buyItem(event);
@@ -168,8 +129,8 @@ App = {
     },    
 
     createOrganizedEvent: function(event) {
-        event.preventDefault();
-        var processId = parseInt($(event.target).data('id'));
+
+        event.preventDefault();      
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.createOrganizedEvent(
@@ -185,7 +146,26 @@ App = {
         });
     },
 
+    createTicket: function(event) {
+        
+        event.preventDefault();        
 
+        App.contracts.SupplyChain.deployed().then(function(instance) {
+            return instance.createTicket(
+                $("#ownerID").val(), 
+                $("#ticket_organizedEventID").val(), 
+                $("#productNotes").val(),
+                $("#validatorID").val()
+            );
+        }).then(function(result) {
+            $("#console").text(result);
+            console.log('createTicket',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },
+
+    /*
     harvestItem: function(event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
@@ -308,15 +288,12 @@ App = {
             console.log(err.message);
         });
     },
+    */
 
-    fetchTicket: function () {
-    ///   event.preventDefault();
-    ///    var processId = parseInt($(event.target).data('id'));
-        App.upc = $('#upc').val();
-        console.log('upc',App.upc);
+    fetchTicket: function () {          
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
-          return instance.fetchTicket(App.upc);
+          return instance.fetchTicket($("#upc").val());
         }).then(function(result) {
           $("#console").text(result);
           console.log('fetchTicket', result);
@@ -328,7 +305,7 @@ App = {
     fetchOrganizedEvent: function () {        
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
-          return instance.fetchOrganizedEvent.call($("#organizedEventId").val());
+          return instance.fetchOrganizedEvent.call($("#event_organizedEventId").val());
         }).then(function(result) {
           $("#console").text(result);
           console.log('fetchOrganizedEvent', result);
