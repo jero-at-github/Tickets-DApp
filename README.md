@@ -31,9 +31,10 @@ Contract owner: 0x4348e2F2ac596e44E6A6D4151aE84e4aA4126A8d
 #### Usage instructions
 
 To run the UI: 
-1.  Please, create in Metamask 3 accounts for each of the respectives roles: Events organizer, Validator, Attendee
-2.  ```npm install```
-3.  ```npm run webapp```
+1.  Please, create in Metamask 3 accounts for each of the respectives roles: Events organizer, Attendee, Validator
+2.  Replace in app.js the 3 created accounts in the corresponding App object varibales (organizerID, validatorID, consumerID)
+3.  ```npm install```
+4.  ```npm run webapp```
 
 To deploy in local environment:
 1.  ```npm run deploy-web```

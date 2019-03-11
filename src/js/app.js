@@ -3,10 +3,17 @@ App = {
     contracts: {},
     emptyAddress: "0x0000000000000000000000000000000000000000",        
     metamaskAccountID: "0x0000000000000000000000000000000000000000",
+    organizerID: "0x5ecD0CcD50d9Ca527923E8dC4F55ED30b740B8C7",
+    validatorID: "0x6517E225289aCD4c64F3243Ebe979475e4B15Ff7",
+    consumerID: "0x0000000000000000000000000000000000000000",
 
     init: async function () {       
+
+        $("#originOrganizerID").val(App.organizerID);
+        $("#validatorID").val(App.validatorID);                
+
         /// Setup access to blockchain
-        return await App.initWeb3();
+        return await App.initWeb3();        
     },
 
     initWeb3: async function () {
