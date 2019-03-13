@@ -41,7 +41,8 @@ Contract owner: 0x4348e2F2ac596e44E6A6D4151aE84e4aA4126A8d
     validatorID: "",
     consumerID: "",
     ```
-    This will populate for you the corresponding values in the UI fields. Otherwise you have to type them manually.
+    This will populate for you the corresponding values in the UI fields. Otherwise you have to type them manually.  
+
 3.  From the contract owner address create a Organized Event   
 4.  From the contract owner address create a ticket
 5.  From the contract owner address put a ticket for sell
