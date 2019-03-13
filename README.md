@@ -9,6 +9,21 @@ Diagrams are included in the folder "diagrams" including:
 *  State diagram
 *  Classes (Data Model) diagram
 
+#### Usage instructions
+
+To run the UI: 
+1.  ```npm install```
+2.  ```npm run webapp```
+
+To deploy in local environment:
+1.  ```npm run deploy-web```
+
+To deploy in rinkeby environment:
+1.  ```npm run deploy-rinkeby```
+
+To test the contracts:
+1.  ```npm run test```
+
 ### Versions
 
 *  Program version number: 1.0.0
@@ -43,23 +58,9 @@ Contract owner: 0x4348e2F2ac596e44E6A6D4151aE84e4aA4126A8d
     ```
     This will populate for you the corresponding values in the UI fields. Otherwise you have to type them manually.  
 
-3.  From the contract owner address create a Organized Event   
-4.  From the contract owner address create a ticket
-5.  From the contract owner address put a ticket for sell
-6.  From the attendee (consumer) address buy a ticket
-7.  From the validator address validate a ticket
+3.  From the Metamask contract owner address create a Organized Event   
+4.  From the Metamask organizer address create a ticket
+5.  From the Metamask organizer address put a ticket for sell
+6.  From the Metamask attendee (consumer) address buy a ticket
+7.  From the Metamask validator address validate a ticket
 
-#### Usage instructions
-
-To run the UI: 
-1.  ```npm install```
-2.  ```npm run webapp```
-
-To deploy in local environment:
-1.  ```npm run deploy-web```
-
-To deploy in rinkeby environment:
-1.  ```npm run deploy-rinkeby```
-
-To test the contracts:
-1.  ```npm run test```
