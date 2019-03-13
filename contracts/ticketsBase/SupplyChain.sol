@@ -129,7 +129,9 @@ contract SupplyChain {
     }
 
     // Define a function 'create' that allows a organizer to create a organized event
-    function createOrganizedEvent(address _originOrganizerID, string _originOrganizerName, string  _originOrganizerInformation) public {      
+    function createOrganizedEvent(address _originOrganizerID, string _originOrganizerName, string  _originOrganizerInformation) public 
+        onlyOwner() {      
+            
         organizedEventId = organizedEventId + 1;      
 
         // Create new organized event
@@ -173,10 +175,10 @@ contract SupplyChain {
 
     // Define a function 'sellItem' that allows a event oganizer to mark a ticket 'ForSale'
     function putTicketForSale(uint _upc, uint _price) public     
-    // Call modifier to check if upc has passed previous supply chain stage    
-    created(_upc) 
-    // Call modifier to verify caller of this function
-    verifyCaller(tickets[_upc].ownerID) {
+        // Call modifier to check if upc has passed previous supply chain stage    
+        created(_upc) 
+        // Call modifier to verify caller of this function
+        verifyCaller(tickets[_upc].ownerID) {
 
         // Update the appropriate fields
         tickets[_upc].itemState = State.ForSale;
@@ -190,12 +192,12 @@ contract SupplyChain {
     // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
     // and any excess ether sent is refunded back to the buyer
     function buyTicket(uint _upc) public payable 
-    // Call modifier to check if upc has passed previous supply chain stage
-    forSale(_upc)
-    // Call modifer to check if buyer has paid enough
-    paidEnough(tickets[_upc].productPrice)
-    // Call modifer to send any excess ether back to buyer
-    checkValue(_upc) {
+        // Call modifier to check if upc has passed previous supply chain stage
+        forSale(_upc)
+        // Call modifer to check if buyer has paid enough
+        paidEnough(tickets[_upc].productPrice)
+        // Call modifer to send any excess ether back to buyer
+        checkValue(_upc) {
 
         // Update the appropriate fields - ownerID, distributorID, itemState
         tickets[_upc].itemState = State.Sold;    
@@ -210,10 +212,10 @@ contract SupplyChain {
     // Define a function 'validateTicket' that allows the validator to validate a ticket
     // Use the above modifers to check if the item is sold
     function validateTicket(uint _upc, address consumerId) public 
-    // Call modifier to check if upc has passed previous supply chain stage
-    sold(_upc)
-    // Call modifier to verify caller of this function
-    verifyCaller(tickets[_upc].validatorID) {
+        // Call modifier to check if upc has passed previous supply chain stage
+        sold(_upc)
+        // Call modifier to verify caller of this function
+        verifyCaller(tickets[_upc].validatorID) {
 
         // Update the appropriate fields            
         if ( tickets[_upc].consumerID == consumerId) {
