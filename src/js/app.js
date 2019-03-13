@@ -146,26 +146,20 @@ App = {
         }).catch(function(err) {
             console.log(err.message);
         });
-    },
-
-    /*
+    },    
    
-    buyItem: function (event) {
-        event.preventDefault();
-        var processId = parseInt($(event.target).data('id'));
+    buyTicket: function (event) {        
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
-            const walletValue = web3.toWei(3, "ether");
-            return instance.buyItem(App.upc, {from: App.metamaskAccountID, value: walletValue});
+            const walletValue =  web3.toWei($("#buy_price").val(), "ether");       
+            return instance.buyTicket($("#buy_upc").val(), {from: App.metamaskAccountID, value: walletValue});
         }).then(function(result) {
             $("#console").text(result);
-            console.log('buyItem',result);
+            console.log('buyTicket',result);
         }).catch(function(err) {
             console.log(err.message);
         });
-    },   
-    
-    */
+    },       
 
     fetchTicket: function () {          
 
