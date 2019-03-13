@@ -113,7 +113,11 @@ App = {
                 $("#originOrganizerInformation").val()
             );
         }).then(function(result) {
-            $("#console").text(result);
+
+            $("#console").text(
+                result.logs[0].event +
+                result.logs[0].args.organizedEventId.toNumber()
+            );
             console.log('createOrganizedEvent',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -131,7 +135,11 @@ App = {
                 $("#validatorID").val()
             );
         }).then(function(result) {
-            $("#console").text(result);
+           
+            $("#console").text(
+                result.logs[0].event + ":" +
+                result.logs[0].args.upc.toNumber()
+            );            
             console.log('createTicket',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -144,7 +152,10 @@ App = {
             let productPrice = web3.toWei($("#price").val(), "ether");            
             return instance.putTicketForSale($("#upc").val(), productPrice, {from: App.metamaskAccountID});
         }).then(function(result) {
-            $("#console").text(result);
+            $("#console").text(
+                result.logs[0].event + ":" +
+                result.logs[0].args.upc.toNumber()
+            );
             console.log('putTicketForSale',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -156,8 +167,11 @@ App = {
         App.contracts.SupplyChain.deployed().then(function(instance) {
             const walletValue =  web3.toWei($("#buy_price").val(), "ether");       
             return instance.buyTicket($("#buy_upc").val(), {from: App.metamaskAccountID, value: walletValue});
-        }).then(function(result) {
-            $("#console").text(result);
+        }).then(function(result) {            
+            $("#console").text(
+                result.logs[0].event + ":" +
+                result.logs[0].args.upc.toNumber()
+            );
             console.log('buyTicket',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -174,7 +188,10 @@ App = {
                 $("#consumerID").val()
             );
         }).then(function(result) {
-            $("#console").text(result);
+            $("#console").text(
+                result.logs[0].event + ":" +
+                result.logs[0].args.upc.toNumber()
+            );
             console.log('validateTicket',result);
         }).catch(function(err) {
             console.log(err.message);
