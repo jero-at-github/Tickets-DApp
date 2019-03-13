@@ -24,7 +24,7 @@
         <div class="col-4">            
                               
             <!-- Create organized event-->
-            <h2>Organized Events overview</h2>
+            <h2>Contract's owner overview</h2>
             <br />            
             <div class="form-group">                                                            
                 <label for="originOrganizerID">Organizer Address</label>
@@ -48,7 +48,7 @@
             </div>        
 
             <!-- Create ticket-->
-            <h2>Tickets overview</h2>
+            <h2>Organizer overview</h2>
             <br />               
             <div class="form-group">                                                            
                  
@@ -77,7 +77,8 @@
             </div>        
 
             <!-- Buy ticket-->            
-            <br />               
+            <h2>Attendee overview</h2>
+            <br />                 
             <div class="form-group">                                                            
                  
                 <label for="buy_upc">Ticket ID</label>
@@ -88,6 +89,20 @@
 
                 <button type="button" class="btn btn-primary" data-id="6">Buy ticket</button> [Change in Metamask to attendee (buyer) account]
             </div>                          
+
+             <!-- Validate ticket-->   
+             <h2>Validator overview</h2>         
+             <br />               
+             <div class="form-group">                                                            
+                  
+                 <label for="validate_upc">Ticket ID</label>
+                 <input type="number" class="form-control" id="validate_upc" name="validate_upc" value="1"><br />
+                 
+                 <label for="consumerID">Attendee ID</label>
+                <input type="text" class="form-control" id="consumerID" name="consumerID" value=""><br />
+
+                 <button type="button" class="btn btn-primary" data-id="7">Validate ticket</button> [Change in Metamask to validator account]
+             </div>                          
         </div>
         <div class="col-4">      
             <h2>Console<span></span></h2>       

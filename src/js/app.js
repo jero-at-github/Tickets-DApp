@@ -5,12 +5,13 @@ App = {
     metamaskAccountID: "0x0000000000000000000000000000000000000000",
     organizerID: "0x5ecD0CcD50d9Ca527923E8dC4F55ED30b740B8C7",
     validatorID: "0x6517E225289aCD4c64F3243Ebe979475e4B15Ff7",
-    consumerID: "0x0000000000000000000000000000000000000000",
+    consumerID: "0xDBb54507C1f9D815C1B60d6D44F239C002c5Cd22",
 
     init: async function () {       
 
         $("#originOrganizerID").val(App.organizerID);
         $("#validatorID").val(App.validatorID);                
+        $("#consumerID").val(App.consumerID);                
 
         /// Setup access to blockchain
         return await App.initWeb3();        
@@ -57,7 +58,9 @@ App = {
             console.log('data',data);
             var SupplyChainArtifact = data;
             App.contracts.SupplyChain = TruffleContract(SupplyChainArtifact);
-            App.contracts.SupplyChain.setProvider(App.web3Provider);            
+            App.contracts.SupplyChain.setProvider(App.web3Provider);     
+            
+            App.fetchEvents();
         });
 
         return App.bindEvents();
@@ -161,6 +164,23 @@ App = {
         });
     },       
 
+    validateTicket: function(event) {
+        
+        event.preventDefault();        
+
+        App.contracts.SupplyChain.deployed().then(function(instance) {
+            return instance.validateTicket(     
+                $("#validate_upc").val(), 
+                $("#consumerID").val()
+            );
+        }).then(function(result) {
+            $("#console").text(result);
+            console.log('validateTicket',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },    
+
     fetchTicket: function () {          
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
@@ -197,7 +217,7 @@ App = {
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
         var events = instance.allEvents(function(err, log){
-          if (!err)
+          if (!err)      
             $("#ftc-events").append('<li>' + log.event + ' - ' + log.transactionHash + '</li>');
         });
         }).catch(function(err) {
