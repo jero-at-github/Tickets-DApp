@@ -9,6 +9,13 @@ Diagrams are included in the folder "diagrams" including:
 *  State diagram
 *  Classes (Data Model) diagram
 
+### Versions
+
+*  Program version number: 1.0.0
+*  Node version number: v8.11.4
+*  Truffle version number: Truffle v4.1.15 (core: 4.1.15)
+*  Web3 version number: 0.18.4
+
 #### Libraries
 
 Node.js:
