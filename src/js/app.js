@@ -3,9 +3,14 @@ App = {
     contracts: {},
     emptyAddress: "0x0000000000000000000000000000000000000000",        
     metamaskAccountID: "0x0000000000000000000000000000000000000000",
+    organizerID: "",
+    validatorID: "",
+    consumerID: "",
+    /*
     organizerID: "0x5ecD0CcD50d9Ca527923E8dC4F55ED30b740B8C7",
     validatorID: "0x6517E225289aCD4c64F3243Ebe979475e4B15Ff7",
     consumerID: "0xDBb54507C1f9D815C1B60d6D44F239C002c5Cd22",
+    */
 
     init: async function () {       
 
